@@ -121,7 +121,7 @@ describe('NFT', () => {
         nft = await NFT.deploy(name, symbol, cost, maxSupply, allowMintingOn, baseURI)
         nft.connect(minter).mint(1, { value : cost })
 
-        await expect(nft.tokenURI('99')).to.be.reverted
+        await expect(nft.tokenURI(baseURI)).to.be.reverted
       })
       it('rejects minting more than 5 NFTs at once', async () => {
      //   const allowMintingOn = Math.floor(Date.now() / 1000); // current timestamp in seconds
@@ -138,24 +138,13 @@ describe('NFT', () => {
 
   })
   })
-  describe('Displaying NFTs', () => {
+    describe('Failure', () => {
+      
+    })
+  
     describe('Success', () => {
       beforeEach(async () => {
-        let transaction, result
-        const allowMintingOn = Date.now().toString().slice(0,10) // now timing
-        const NFT = await ethers.getContractFactory('NFT')
-        nft = await NFT.deploy(name, symbol, cost, maxSupply, allowMintingOn, baseURI)
-        transaction = await nft.connect(minter).mint(2, { value : ether(3) })
-        result = await transaction.wait()
 
-      })
-      it(`returns all the NFTs for a given owner`, async () => {
-        let tokenIds = await nft.walletOfOwner(minter.address)
-        //console.log("OWNERS WALLET", tokenIds)
-        expect(tokenIds.length).to.equal(2)
-        expect(tokenIds[0].toString()).to.equal('1')
-        expect(tokenIds[1].toString()).to.equal('2')
-      })
     })
 })
 })

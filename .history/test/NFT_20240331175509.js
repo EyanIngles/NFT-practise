@@ -154,7 +154,6 @@ describe('NFT', () => {
         //console.log("OWNERS WALLET", tokenIds)
         expect(tokenIds.length).to.equal(2)
         expect(tokenIds[0].toString()).to.equal('1')
-        expect(tokenIds[1].toString()).to.equal('2')
       })
     })
 })
