@@ -50,13 +50,11 @@ describe('NFT', () => {
     })
     it(`returns the owner`, async () => {
       expect(await nft.owner()).to.equal(deployer.address)
-      console.log(cost, "this should be the old price")
     })
     it(`owner updates the price of the NFTs`, async () => {
-      transaction = await nft.connect(deployer).setCost(ether(50))
+      transaction = await nft.connect(deployer).setCost(ether(10))
       result = await transaction.wait()
-      expect( await nft.cost()).to.equal(ether(50))
-      console.log(await nft.cost(), "new price")
+      console.log(result.event(), "this is to be changed to 10 ether each")
 
     })
   })

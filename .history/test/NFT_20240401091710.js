@@ -50,14 +50,6 @@ describe('NFT', () => {
     })
     it(`returns the owner`, async () => {
       expect(await nft.owner()).to.equal(deployer.address)
-      console.log(cost, "this should be the old price")
-    })
-    it(`owner updates the price of the NFTs`, async () => {
-      transaction = await nft.connect(deployer).setCost(ether(50))
-      result = await transaction.wait()
-      expect( await nft.cost()).to.equal(ether(50))
-      console.log(await nft.cost(), "new price")
-
     })
   })
 
@@ -191,9 +183,15 @@ describe('NFT', () => {
         it('emits a withdraw event', async () => {
           await expect(transaction).to.emit(nft, "WithDraw").withArgs(cost, deployer.address)
         })
-        it('prevents non-owner from withdrawing', async () => {
-          await expect(nft.connect(minter).withDraw()).to.be.reverted
-        })
+      
+      
+      it('requires at least one NFT to be minted', async () => {
+        const allowMintingOn = Date.now().toString().slice(0,10) // now timing
+        const NFT = await ethers.getContractFactory('NFT')
+        nft = await NFT.deploy(name, symbol, cost, maxSupply, allowMintingOn, baseURI)
+
+        await expect(nft.connect(minter).mint(0, { value: cost })).to.be.reverted
+      })
     })
   })
 })

@@ -56,7 +56,7 @@ describe('NFT', () => {
       transaction = await nft.connect(deployer).setCost(ether(50))
       result = await transaction.wait()
       expect( await nft.cost()).to.equal(ether(50))
-      console.log(await nft.cost(), "new price")
+      console.log(nft.cost.toString(), "new price")
 
     })
   })

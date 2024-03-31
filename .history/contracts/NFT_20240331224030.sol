@@ -66,10 +66,6 @@ contract NFT is ERC721Enumerable, Ownable {
         emit WithDraw(balance, msg.sender);
     }
 
-    function setCost(uint256 _newCost) public onlyOwner {
-        cost = _newCost;
-    }
-
 
 }
 

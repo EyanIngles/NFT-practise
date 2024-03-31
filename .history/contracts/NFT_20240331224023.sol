@@ -13,7 +13,7 @@ contract NFT is ERC721Enumerable, Ownable {
     string public baseExtension = '.json';
 
     event Mint(uint256 mintAmount, address minter);
-    event WithDraw(uint256 amount, address owner);
+    event WithDraw(uint256 amount, address withDrawer);
 
     constructor(
         string memory _name, 
@@ -64,10 +64,6 @@ contract NFT is ERC721Enumerable, Ownable {
         require(successs);
 
         emit WithDraw(balance, msg.sender);
-    }
-
-    function setCost(uint256 _newCost) public onlyOwner {
-        cost = _newCost;
     }
 
 
