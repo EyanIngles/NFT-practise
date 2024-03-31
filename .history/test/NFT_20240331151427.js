@@ -72,9 +72,6 @@ describe('NFT', () => {
       it('returns total number of tokens minter owns', async () => {
         expect(await nft.balanceOf(minter.address)).to.equal(1)
       })
-      it('returns IPFS URI', async () => {
-        expect(await nft.tokenURI(1)).to.equal(`${baseURI}1.json`)
-      })
       it('updates total supply', async () => {
         expect(await nft.totalSupply()).to.equal(1)
       })

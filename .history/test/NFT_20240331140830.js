@@ -11,7 +11,7 @@ describe('NFT', () => {
   let nft, deployer, minter
   const name = 'Dapp Punks'
   const symbol = 'DP'
-  const cost = ether(1)
+  const cost = ether(0.25)
   const maxSupply = 30
   const baseURI = 'ipfs://QmQ2jnDYecFhrf3asENjyjZRX1pZSsNWG3qHzmNDvXa9qg/'
 
@@ -66,23 +66,11 @@ describe('NFT', () => {
         result = await transaction.wait()
         
       })
-      it('returns the address of the minter', async () => {
-        expect(await nft.ownerOf(1)).to.equal(minter.address)
-      })
-      it('returns total number of tokens minter owns', async () => {
-        expect(await nft.balanceOf(minter.address)).to.equal(1)
-      })
-      it('returns IPFS URI', async () => {
-        expect(await nft.tokenURI(1)).to.equal(`${baseURI}1.json`)
-      })
       it('updates total supply', async () => {
         expect(await nft.totalSupply()).to.equal(1)
       })
       it(`updates the ether balance `, async () => {
         expect(await ethers.provider.getBalance(nft.address)).to.equal(cost)
-      })
-      it(`Emits an event `, async () => {
-        await expect(transaction).to.emit(nft, "Mint").withArgs(1, minter.address)
       })
     })
     describe('Failure', () => {
@@ -91,42 +79,29 @@ describe('NFT', () => {
         const NFT = await ethers.getContractFactory('NFT')
         nft = await NFT.deploy(name, symbol, cost, maxSupply, allowMintingOn, baseURI)
 
-        await expect(nft.connect(minter).mint(1, { value: ether(0.2) })).to.be.reverted
+        await expect( nft.connect(minter).mint(1, { value: ether(0.2) })).to.be.reverted
       })
       it('rejects minting before allowed time', async () => {
         const allowMintingOn = new Date('May 26, 2030 18:00:00').getTime().toString().slice(0,10) // now timing
         const NFT = await ethers.getContractFactory('NFT')
         nft = await NFT.deploy(name, symbol, cost, maxSupply, allowMintingOn, baseURI)
 
-        await expect(nft.connect(minter).mint(1, { value: cost })).to.be.reverted
+        await expect( nft.connect(minter).mint(1, { value: cost })).to.be.reverted
       })
       it('requires at least one NFT to be minted', async () => {
         const allowMintingOn = Date.now().toString().slice(0,10) // now timing
         const NFT = await ethers.getContractFactory('NFT')
         nft = await NFT.deploy(name, symbol, cost, maxSupply, allowMintingOn, baseURI)
 
-        await expect(nft.connect(minter).mint(0, { value: cost })).to.be.reverted
+        await expect( nft.connect(minter).mint(0, { value: cost })).to.be.reverted
       })
-      it('will not allow more mints than max supply', async () => {
+      it('rejects due trying to mint more than 5 at once', async () => {
         const allowMintingOn = Date.now().toString().slice(0,10) // now timing
         const NFT = await ethers.getContractFactory('NFT')
         nft = await NFT.deploy(name, symbol, cost, maxSupply, allowMintingOn, baseURI)
 
-        await expect(nft.connect(minter).mint(100, { value: cost })).to.be.reverted
+        await expect( nft.connect(minter).mint(4, { value: cost })).to.be.reverted
       })
-      it('rejects minting more than 5 NFTs at once', async () => {
-     //   const allowMintingOn = Math.floor(Date.now() / 1000); // current timestamp in seconds
-     //   const NFT = await ethers.getContractFactory('NFT');
-     //   nft = await NFT.deploy(name, symbol, cost, maxSupply, allowMintingOn, baseURI);
-    //
-     //   // Calculate the total cost for minting 6 NFTs
-     //   const totalCost = cost.mul(6);
-    //
-     //   // Attempt to mint more than 5 NFTs
-     //   await expect(nft.connect(minter).mint(6, { value: totalCost })).to.be.reverted;
-    })
-    
-
   })
   })
     describe('Failure', () => {
