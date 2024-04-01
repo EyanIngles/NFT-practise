@@ -17,12 +17,12 @@ async function main() {
 
 
   // Deploy NFT
-  const NFT = await hre.ethers.getContractFactory('NFT')
+  const NFT = await hre.ethers.getContractFactory('Token')
   const nft = await NFT.deploy(name, symbol, cost, maxSupply, allowMintingOn, baseURI)
     
 
   await nft.deployed()
-  console.log(`NFT deployed to: ${nft.address}\n`)
+  console.log(`Token deployed to: ${nft.address}\n`)
 }
 
 // We recommend this pattern to be able to use async/await everywhere
